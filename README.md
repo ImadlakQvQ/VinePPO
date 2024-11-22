@@ -123,8 +123,7 @@ This setup was tested on 4x A100 80GB GPUs for Rho models and 8x H100 80GB GPUs 
 ### Single GPU Training (Only for Rho models)
 Add this config `configs/trainers/devBz16.jsonnet` to the `$CONFIGSTR` variable in the script above:
 ```bash
-CONFIGSTR="configs/<config_file>.jsonnet,\
-configs/trainers/devBz16.jsonnet"
+CONFIGSTR="configs/polIter_rho1bSft2_vineppo_GSM8K.jsonnet, configs/trainers/devBz16.jsonnet"
 ```
 Note that this is not fully tested and you may need to adjust the batch size to fit your GPU memory.
 
