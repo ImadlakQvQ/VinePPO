@@ -171,7 +171,7 @@ class PolicyIterationRuntime(DistributedRuntime):
             logger.info(f"Finished iteration {iteration}")
 
     def run_iteration_loop(self, force_rerun: bool = False):
-        # Check if final checkpoint exists 检测有没有存储模型，有的话就不要训练了
+        # Check if final checkpoint exists 检测有没有存储模型，有的话就不要训练了 程序运行主程序
         final_checkpoint = self.exp_root / "checkpoints" / "final"
         if final_checkpoint.exists() and not force_rerun:
             logger.info("Final checkpoint already exists. Skipping iteration loop.")
@@ -315,6 +315,7 @@ class PolicyIterationRuntime(DistributedRuntime):
     def run_evaluation(
         self, force_rerun: bool = False, every_n_checkpoints: Optional[int] = None
     ):
+        # evaluation运行主程序
         if isinstance(self, DistributedRuntime):
             assert (
                 self.distributed_state.num_processes == 1
@@ -328,7 +329,7 @@ class PolicyIterationRuntime(DistributedRuntime):
 
         checkpoint_dir = self.exp_root / "checkpoints"
         checkpoint_dir.mkdir(exist_ok=True, parents=True)
-
+        # choose the checkpoints which need to be evaluated
         ckpts = self._get_list_of_evaluation_checkpoints(
             checkpoint_dir, every_n_checkpoints
         )
@@ -374,11 +375,12 @@ class PolicyIterationRuntime(DistributedRuntime):
             for pipeline_cfg in self.inference_pipeline_configs:
                 pipeline_cfg = copy.deepcopy(pipeline_cfg)
                 inference_name = pipeline_cfg["inference_name"]
+                # inference_name: gsm8k_validation
                 logger.info(f"Running inference pipeline `{inference_name}`")
 
                 infer_pipeline_root_dir = eval_dir / inference_name
                 infer_pipeline_root_dir.mkdir(exist_ok=True, parents=True)
-
+                # main running process
                 infer_pipeline = InferencePipeline.from_params(
                     Params(pipeline_cfg),
                     tokenizer=self.tokenizer,
